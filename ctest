@@ -1,0 +1,61 @@
+#!/bin/bash
+
+PROG=$(basename $0)
+FILE=$1
+
+COLOR_RED='\033[0;31m'
+COLOR_GREEN='\033[0;32m'
+COLOR_RESET='\033[0m'
+
+err() {
+    echo -e $COLOR_RED$1$COLOR_RESET
+}
+
+ok() {
+    echo -e $COLOR_GREEN$1$COLOR_RESET
+}
+
+if [ $# -lt 1 ]; then
+    err "Too few arguments."
+    exit 1
+fi
+
+if [ -f $FILE ]; then
+    ok "Found \"$FILE\" executable."
+else
+    err "Executable \"$FILE\" not found."
+    exit 2
+fi
+
+# echo ""
+
+counter=0
+mx=0
+# find test files with input
+echo "running test files from \"$FILE\"-tests."
+for f in ./$FILE-tests/*.in; do
+    FILE1="ctest.out"
+    FILE2=${f%.*}".out"
+
+    ((mx+=1))
+    ./$1 < $f > $FILE1
+    if cmp -s "$FILE1" "$FILE2"; then
+        ok $(basename ${f%.*})" passed"
+        ((counter+=1))
+    else
+        err $(basename ${f%.*})" wrong answer"
+        echo ""
+        echo "program output:"
+        cat $FILE1
+        echo "expected:"
+        cat $FILE2
+        echo ""
+    fi
+done
+
+if [ $counter -eq $mx ]; then
+    ok $counter"/"$mx
+    ok "All clear!"
+else
+    err $counter"/"$mx
+fi
