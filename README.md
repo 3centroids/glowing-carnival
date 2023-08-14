@@ -10,4 +10,4 @@ Test your C++ program on multiple test cases.
 
 ## Warning
 
-Make sure our program outputs new lines exactly as your output files state.
+Make sure your program outputs new lines exactly as your output files state.

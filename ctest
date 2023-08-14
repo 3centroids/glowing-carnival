@@ -27,8 +27,6 @@ else
     exit 2
 fi
 
-# echo ""
-
 counter=0
 mx=0
 # find test files with input
@@ -44,12 +42,10 @@ for f in ./$FILE-tests/*.in; do
         ((counter+=1))
     else
         err $(basename ${f%.*})" wrong answer"
-        echo ""
         echo "program output:"
         cat $FILE1
         echo "expected:"
         cat $FILE2
-        echo ""
     fi
 done
 
